@@ -183,7 +183,7 @@ tBTM_STATUS BTM_SetDiscoverability (UINT16 inq_mode, UINT16 window, UINT16 inter
     BOOLEAN      is_limited;
     BOOLEAN      cod_limited;
 
-    BTM_TRACE_API0 ("BTM_SetDiscoverability");
+    BTM_TRACE_API3 ("BTM_SetDiscoverability, inq_mode = %d, window = %d, interval = %d", inq_mode, window, interval);
 #if (BLE_INCLUDED == TRUE && BLE_INCLUDED == TRUE)
     if (HCI_LE_HOST_SUPPORTED(btm_cb.devcb.local_lmp_features[HCI_EXT_FEATURES_PAGE_1]))
     {
@@ -226,6 +226,7 @@ tBTM_STATUS BTM_SetDiscoverability (UINT16 inq_mode, UINT16 window, UINT16 inter
             interval > HCI_MAX_INQUIRYSCAN_INTERVAL ||
             window > interval)
         {
+            BTM_TRACE_API0("BTM_ILLEGAL_VALUE");
             return (BTM_ILLEGAL_VALUE);
         }
     }

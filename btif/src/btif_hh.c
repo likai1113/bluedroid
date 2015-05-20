@@ -696,6 +696,7 @@ bt_status_t btif_hh_connect(bt_bdaddr_t *bd_addr)
 
 void btif_hh_disconnect(bt_bdaddr_t *bd_addr)
 {
+    BTIF_TRACE_DEBUG0("btif_hh_disconnect");
     BD_ADDR *bda = (BD_ADDR*)bd_addr;
     btif_hh_device_t *p_dev;
     p_dev = btif_hh_find_connected_dev_by_bda(bd_addr);
@@ -1262,6 +1263,7 @@ static bt_status_t connect( bt_bdaddr_t *bd_addr)
 *******************************************************************************/
 static bt_status_t disconnect( bt_bdaddr_t *bd_addr )
 {
+    BTIF_TRACE_DEBUG0("disconnect---likai");
     CHECK_BTHH_INIT();
     btif_hh_device_t *p_dev;
 
@@ -1739,6 +1741,24 @@ static void  cleanup( void )
 
 }
 
+/** Retrieves battery level for remote device if supported */
+static bt_status_t get_battery_level(bt_bdaddr_t *bd_addr)
+{
+    return BT_STATUS_SUCCESS;
+}
+
+/** OTA firmware version. */
+static bt_status_t ota_get_fwversion(bt_bdaddr_t *bd_addr)
+{
+    return BT_STATUS_SUCCESS;
+}
+
+/** OTA firmware update. */
+static bt_status_t ota_update_firmware(bt_bdaddr_t *bd_addr, char* path)
+{
+    return BT_STATUS_SUCCESS;
+}
+
 static const bthh_interface_t bthhInterface = {
     sizeof(bthhInterface),
     init,
@@ -1753,6 +1773,9 @@ static const bthh_interface_t bthhInterface = {
     get_report,
     set_report,
     send_data,
+    get_battery_level,//get_battery_level
+    ota_get_fwversion,//ota_get_fwversion
+    ota_update_firmware,//ota_update_firmware
     cleanup,
 };
 
@@ -1778,6 +1801,8 @@ bt_status_t btif_hh_execute_service(BOOLEAN b_enable)
      }
      return BT_STATUS_SUCCESS;
 }
+
+
 
 /*******************************************************************************
 **

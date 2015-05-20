@@ -323,6 +323,7 @@ void bta_gattc_deregister(tBTA_GATTC_CB *p_cb, tBTA_GATTC_RCB  *p_clreg)
 *******************************************************************************/
 void bta_gattc_process_api_open (tBTA_GATTC_CB *p_cb, tBTA_GATTC_DATA * p_msg)
 {
+    APPL_TRACE_DEBUG0("bta_gattc_process_api_open");
     UINT16 event = ((BT_HDR *)p_msg)->event;
     tBTA_GATTC_CLCB *p_clcb = NULL;
     tBTA_GATTC_RCB *p_clreg = bta_gattc_cl_get_regcb(p_msg->api_conn.client_if);
@@ -331,6 +332,7 @@ void bta_gattc_process_api_open (tBTA_GATTC_CB *p_cb, tBTA_GATTC_DATA * p_msg)
     {
         if (p_msg->api_conn.is_direct)
         {
+            APPL_TRACE_DEBUG0("bta_gattc_process_api_open, autoConnect");
             if ((p_clcb = bta_gattc_find_alloc_clcb(p_msg->api_conn.client_if,
                                                     p_msg->api_conn.remote_bda)) != NULL)
             {
@@ -348,6 +350,7 @@ void bta_gattc_process_api_open (tBTA_GATTC_CB *p_cb, tBTA_GATTC_DATA * p_msg)
         }
         else
         {
+            APPL_TRACE_DEBUG0("bta_gattc_process_api_open, not autoConnect");
             bta_gattc_init_bk_conn(&p_msg->api_conn, p_clreg);
         }
     }
@@ -1798,43 +1801,47 @@ void bta_gattc_process_indicate(UINT16 conn_id, tGATTC_OPTYPE op, tGATT_CL_COMPL
     tBTA_GATTC_NOTIFY   notify;
     BD_ADDR             remote_bda;
     tBTA_GATTC_IF       gatt_if;
-
+    APPL_TRACE_DEBUG0("likai->>before GATT_GetConnectionInfor");
     if (!GATT_GetConnectionInfor(conn_id, &gatt_if, remote_bda))
     {
         APPL_TRACE_ERROR0("indication/notif for unknown app");
         return;
     }
-
+    APPL_TRACE_DEBUG0("likai->> before bta_gattc_cl_get_regcb");
     if ((p_clrcb = bta_gattc_cl_get_regcb(gatt_if)) == NULL)
     {
         APPL_TRACE_ERROR0("indication/notif for unregistered app");
         return;
     }
-
+    APPL_TRACE_DEBUG0("likai->> before bta_gattc_find_srcb");
     if ((p_srcb = bta_gattc_find_srcb(remote_bda)) == NULL)
     {
         APPL_TRACE_ERROR0("indication/notif for unknown device, ignore");
         return;
     }
-
+    APPL_TRACE_DEBUG0("likai->> before bta_gattc_find_clcb_by_conn_id");
     p_clcb = bta_gattc_find_clcb_by_conn_id(conn_id);
-
+    APPL_TRACE_DEBUG0("likai->> before bta_gattc_handle2id");
     if (bta_gattc_handle2id(p_srcb, handle,
                             &notify.char_id.srvc_id,
                             &notify.char_id.char_id,
                             &notify.descr_type))
     {
+        APPL_TRACE_DEBUG0("likai->> before bta_gattc_process_srvc_chg_ind");
         /* if non-service change indication/notification, forward to application */
         if (!bta_gattc_process_srvc_chg_ind(conn_id, p_clrcb, p_srcb, p_clcb, &notify, handle))
         {
+            APPL_TRACE_DEBUG0("likai->> before bta_gattc_check_notif_registry");
             /* if app registered for the notification */
             if (bta_gattc_check_notif_registry(p_clrcb, p_srcb, &notify))
             {
                 /* connection not open yet */
                 if (p_clcb == NULL)
                 {
+                    APPL_TRACE_DEBUG0("likai->>p_clcb == NULL, connection not open yet");
                     if ((p_clcb = bta_gattc_clcb_alloc(gatt_if, remote_bda)) != NULL)
                     {
+                        APPL_TRACE_DEBUG0("likai->>bta_gattc_clcb_alloc");
                         p_clcb->bta_conn_id = conn_id;
 
                         bta_gattc_sm_execute(p_clcb, BTA_GATTC_INT_CONN_EVT, NULL);
@@ -1846,7 +1853,10 @@ void bta_gattc_process_indicate(UINT16 conn_id, tGATTC_OPTYPE op, tGATT_CL_COMPL
                 }
 
                 if (p_clcb != NULL)
+                {
+                    APPL_TRACE_DEBUG0("likai->>p_clcb != NULL, bta_gattc_proc_other_indication");
                     bta_gattc_proc_other_indication(p_clcb, op, p_data, &notify);
+                }
             }
             /* no one intersted and need ack? */
             else if (op == GATTC_OPTYPE_INDICATION)

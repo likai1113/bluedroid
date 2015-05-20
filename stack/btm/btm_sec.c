@@ -3427,7 +3427,7 @@ void btm_proc_sp_req_evt (tBTM_SP_EVT event, UINT8 *p)
 #endif
         }
 
-        if (btm_cb.api.p_sp_callback)
+        if (btm_cb.api.p_sp_callback && (evt_data.cfm_req.just_works == FALSE))
         {
             status = (*btm_cb.api.p_sp_callback) (event, (tBTM_SP_EVT_DATA *)&evt_data);
             if (status != BTM_NOT_AUTHORIZED)
@@ -4389,6 +4389,7 @@ void btm_sec_role_changed (void *p_ref_data)
 *******************************************************************************/
 tBTM_STATUS btm_sec_disconnect (UINT16 handle, UINT8 reason)
 {
+    BTM_TRACE_DEBUG2("btm_sec_disconnect, handle = %02x, reason = %x", handle, reason);
     tBTM_SEC_DEV_REC  *p_dev_rec = btm_find_dev_by_handle (handle);
 
     /* In some weird race condition we may not have a record */

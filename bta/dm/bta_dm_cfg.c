@@ -467,6 +467,7 @@ const UINT8 bta_dm_eir_uuid16_list[] = {    0x08, 0x11, /* Headset */
 };
 #endif
 
+const UINT8 bta_dm_eir_manu_spe[] = {0x0F,0x00,0x00,0x01,0x3C};
 /* Extended Inquiry Response */
 const tBTA_DM_EIR_CONF bta_dm_eir_cfg =
 {
@@ -486,8 +487,8 @@ const tBTA_DM_EIR_CONF bta_dm_eir_cfg =
     NULL,   /* Inquiry TX power         */
     0,      /* length of flags in bytes */
     NULL,   /* flags for EIR */
-    0,      /* length of manufacturer specific in bytes */
-    NULL,   /* manufacturer specific */
+    6,      /* length of manufacturer specific in bytes */
+    (UINT8 *)bta_dm_eir_manu_spe,   /* manufacturer specific */
 };
 tBTA_DM_EIR_CONF *p_bta_dm_eir_cfg = (tBTA_DM_EIR_CONF*)&bta_dm_eir_cfg;
 #endif

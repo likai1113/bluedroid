@@ -4103,6 +4103,7 @@ static void bta_dm_set_eir (char *local_name)
 
 #if (BTA_EIR_CANNED_UUID_LIST == TRUE)
     /* if UUID list is provided as static data in configuration */
+    APPL_TRACE_DEBUG0("BTA_EIR_CANNED_UUID_LIST == TRUE");
     if(( p_bta_dm_eir_cfg->bta_dm_eir_uuid16_len > 0 )
         &&(p_bta_dm_eir_cfg->bta_dm_eir_uuid16))
     {
@@ -4129,6 +4130,7 @@ static void bta_dm_set_eir (char *local_name)
         }
     }
 #else /* (BTA_EIR_CANNED_UUID_LIST == TRUE) */
+    APPL_TRACE_DEBUG0("BTA_EIR_CANNED_UUID_LIST == FALSE");
     /* if UUID list is dynamic */
     if ( free_eir_length >= 2)
     {
@@ -4239,7 +4241,7 @@ static void bta_dm_set_eir (char *local_name)
         free_eir_length -= num_uuid * LEN_UUID_128 + 2;
     }
 #endif /* ( BTA_EIR_CANNED_UUID_LIST != TRUE )&&(BTA_EIR_SERVER_NUM_CUSTOM_UUID > 0) */
-
+    APPL_TRACE_DEBUG0("if Flags are provided in configuration");
     /* if Flags are provided in configuration */
     if(( p_bta_dm_eir_cfg->bta_dm_eir_flag_len > 0 )
      &&( p_bta_dm_eir_cfg->bta_dm_eir_flags )
@@ -4252,15 +4254,15 @@ static void bta_dm_set_eir (char *local_name)
         p += p_bta_dm_eir_cfg->bta_dm_eir_flag_len;
         free_eir_length -= p_bta_dm_eir_cfg->bta_dm_eir_flag_len + 2;
     }
-
+    APPL_TRACE_DEBUG1("if Manufacturer Specific are provided in configuration, manufac_spec_len = %d", p_bta_dm_eir_cfg->bta_dm_eir_manufac_spec_len);
+    APPL_TRACE_DEBUG1("free_eir_length = %d", free_eir_length);
     /* if Manufacturer Specific are provided in configuration */
     if(( p_bta_dm_eir_cfg->bta_dm_eir_manufac_spec_len > 0 )
      &&( p_bta_dm_eir_cfg->bta_dm_eir_manufac_spec )
      &&( free_eir_length >= p_bta_dm_eir_cfg->bta_dm_eir_manufac_spec_len + 2 ))
     {
         p_length = p;
-
-        UINT8_TO_STREAM(p, p_bta_dm_eir_cfg->bta_dm_eir_manufac_spec_len + 1);
+        UINT8_TO_STREAM(p, p_bta_dm_eir_cfg->bta_dm_eir_manufac_spec_len);
         UINT8_TO_STREAM(p, BTM_EIR_MANUFACTURER_SPECIFIC_TYPE);
         memcpy(p, p_bta_dm_eir_cfg->bta_dm_eir_manufac_spec,
                p_bta_dm_eir_cfg->bta_dm_eir_manufac_spec_len);
@@ -4272,7 +4274,7 @@ static void bta_dm_set_eir (char *local_name)
     {
         p_length = NULL;
     }
-
+    APPL_TRACE_DEBUG0("if Inquiry Tx Resp Power compiled");
     /* if Inquiry Tx Resp Power compiled */
     if ((p_bta_dm_eir_cfg->bta_dm_eir_inq_tx_power) &&
         (free_eir_length >= 3))
@@ -5030,6 +5032,7 @@ void bta_dm_ble_set_adv_config (tBTA_DM_MSG *p_data)
 *******************************************************************************/
 static void bta_dm_gattc_register(void)
 {
+    APPL_TRACE_DEBUG0("bta_dm_gattc_register");
     tBT_UUID                app_uuid = {LEN_UUID_128,{0}};
 
     if (bta_dm_search_cb.client_if == BTA_GATTS_INVALID_IF)
@@ -5131,9 +5134,10 @@ static void bta_dm_gatt_disc_complete(UINT16 conn_id, tBTA_GATT_STATUS status)
     APPL_TRACE_DEBUG1("bta_dm_gatt_disc_complete conn_id = %d",conn_id);
 
     if (bta_dm_search_cb.uuid_to_search > 0) bta_dm_search_cb.uuid_to_search --;
-
+    APPL_TRACE_DEBUG2("status = %d, uuid_to_search = %d", status, bta_dm_search_cb.uuid_to_search);
     if (status == BTA_GATT_OK && bta_dm_search_cb.uuid_to_search > 0)
     {
+        APPL_TRACE_DEBUG0("start disc gatt services");
         btm_dm_start_disc_gatt_services(conn_id);
     }
     else
@@ -5183,6 +5187,7 @@ static void bta_dm_gatt_disc_complete(UINT16 conn_id, tBTA_GATT_STATUS status)
             }
             else
             {
+                APPL_TRACE_DEBUG0("likai->>>BTA_GATTC_Close");
                 BTA_GATTC_Close(conn_id);
                 bta_dm_search_cb.conn_id = BTA_GATT_INVALID_CONN_ID;
             }
@@ -5204,8 +5209,10 @@ static void bta_dm_gatt_disc_complete(UINT16 conn_id, tBTA_GATT_STATUS status)
 void bta_dm_close_gatt_conn(tBTA_DM_MSG *p_data)
 {
     if (bta_dm_search_cb.conn_id != BTA_GATT_INVALID_CONN_ID)
+    {
+        APPL_TRACE_DEBUG0("likai->>>bta_dm_close_gatt_conn");
         BTA_GATTC_Close(bta_dm_search_cb.conn_id);
-
+    }
     bta_dm_search_cb.conn_id = BTA_GATT_INVALID_CONN_ID;
 }
 

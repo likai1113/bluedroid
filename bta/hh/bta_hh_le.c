@@ -228,10 +228,12 @@ void bta_hh_le_enable(void)
 *******************************************************************************/
 void bta_hh_le_register_cmpl(tBTA_GATTC_REG *p_reg)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_register_cmpl");
     tBTA_HH_STATUS      status = BTA_HH_ERR;
 
     if (p_reg->status == BTA_GATT_OK)
     {
+        APPL_TRACE_DEBUG0("p_reg->status is OK");
         bta_hh_cb.gatt_if = p_reg->client_if;
         status = BTA_HH_OK;
     }
@@ -269,6 +271,7 @@ BOOLEAN bta_hh_le_is_hh_gatt_if(tBTA_GATTC_IF client_if)
 *******************************************************************************/
 void bta_hh_le_deregister(void)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_deregister");
     BTA_GATTC_AppDeregister(bta_hh_cb.gatt_if);
 }
 
@@ -298,6 +301,7 @@ BOOLEAN bta_hh_is_le_device(tBTA_HH_DEV_CB *p_cb, BD_ADDR remote_bda)
 *******************************************************************************/
 BOOLEAN bta_hh_le_hid_srvc_cached(tBTA_HH_DEV_CB *p_dev_cb)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_hid_srvc_cached");
     if (p_dev_cb->hid_srvc[BTA_HH_LE_SRVC_DEF].in_use)
         return TRUE;
     else
@@ -314,6 +318,7 @@ BOOLEAN bta_hh_le_hid_srvc_cached(tBTA_HH_DEV_CB *p_dev_cb)
 *******************************************************************************/
 BOOLEAN bta_hh_le_add_hid_srvc_entry(tBTA_HH_DEV_CB *p_dev_cb, UINT8 idx)
 {
+    APPL_TRACE_DEBUG1("bta_hh_le_add_hid_srvc_entry, idx = %d", idx);
     BOOLEAN added = FALSE;
 
     if (idx < BTA_HH_LE_HID_SRVC_MAX)
@@ -339,6 +344,7 @@ BOOLEAN bta_hh_le_add_hid_srvc_entry(tBTA_HH_DEV_CB *p_dev_cb, UINT8 idx)
 *******************************************************************************/
 void bta_hh_le_open_conn(tBTA_HH_DEV_CB *p_cb, BD_ADDR remote_bda)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_open_conn");
     /* update cb_index[] map */
     p_cb->hid_handle = BTA_HH_GET_LE_DEV_HDL(p_cb->index);
     memcpy(p_cb->addr, remote_bda, BD_ADDR_LEN);
@@ -399,6 +405,7 @@ void bta_hh_le_fill_16bits_char_id(UINT8 inst_id, UINT16 char_uuid,
 *******************************************************************************/
 tBTA_HH_DEV_CB * bta_hh_le_find_dev_cb_by_conn_id(UINT16 conn_id)
 {
+    APPL_TRACE_DEBUG1("bta_hh_le_find_dev_cb_by_conn_id, conn_id = %d", conn_id);
     UINT8   i;
     tBTA_HH_DEV_CB *p_dev_cb = &bta_hh_cb.kdev[0];
 
@@ -418,6 +425,7 @@ tBTA_HH_DEV_CB * bta_hh_le_find_dev_cb_by_conn_id(UINT16 conn_id)
 *******************************************************************************/
 tBTA_HH_DEV_CB * bta_hh_le_find_dev_cb_by_bda(BD_ADDR bda)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_find_dev_cb_by_bda");
     UINT8   i;
     tBTA_HH_DEV_CB *p_dev_cb = &bta_hh_cb.kdev[0];
 
@@ -456,6 +464,7 @@ tBTA_HH_LE_RPT * bta_hh_le_find_report_entry(tBTA_HH_DEV_CB *p_cb,
                                              UINT16 rpt_uuid,
                                              UINT8  char_inst_id)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_find_report_entry");
     UINT8   i;
     UINT8   hid_inst_id = srvc_inst_id;
     tBTA_HH_LE_RPT *p_rpt;
@@ -532,6 +541,8 @@ tBTA_HH_LE_RPT * bta_hh_le_find_alloc_report_entry(tBTA_HH_DEV_CB *p_cb,
                                                    UINT8  inst_id,
                                                    UINT8  prop)
 {
+    bta_hh_le_hid_report_dbg(p_cb);
+    APPL_TRACE_DEBUG1("bta_hh_le_find_alloc_report_entry, rpt_uuid = 0x%04x", rpt_uuid);
     UINT8   i, hid_inst_id = srvc_inst_id;
     tBTA_HH_LE_RPT *p_rpt;
 
@@ -592,6 +603,7 @@ tBTA_HH_LE_RPT * bta_hh_le_find_alloc_report_entry(tBTA_HH_DEV_CB *p_cb,
 tBTA_HH_STATUS bta_hh_le_read_char_dscrpt(tBTA_HH_DEV_CB *p_cb, UINT16 srvc_uuid, UINT8 srvc_inst_id,
                                 UINT16 char_uuid, UINT8 char_inst_id, UINT16 char_descp_uuid)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_read_char_dscrpt");
     tBTA_GATTC_CHAR_ID  char_id;
     tBT_UUID        descr_uuid;
     tBTA_GATTC_CHAR_DESCR_ID    descr_id;
@@ -633,6 +645,7 @@ tBTA_HH_STATUS bta_hh_le_read_char_dscrpt(tBTA_HH_DEV_CB *p_cb, UINT16 srvc_uuid
 *******************************************************************************/
 void bta_hh_le_read_rpt_ref_descr(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_LE_RPT *p_rpt)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_read_rpt_ref_descr");
     BOOLEAN started = FALSE;
     UINT16  srvc_uuid, char_uuid;
 
@@ -699,6 +712,8 @@ void bta_hh_le_read_rpt_ref_descr(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_LE_RPT *p_rp
 void bta_hh_le_save_rpt_ref(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_LE_RPT  *p_rpt,
                             tBTA_GATTC_READ *p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_save_rpt_ref");
+    bta_hh_le_hid_report_dbg(p_rpt);
     UINT8 *pp;
 
     /* if the length of the descriptor value is right, parse it */
@@ -737,6 +752,7 @@ void bta_hh_le_save_rpt_ref(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_LE_RPT  *p_rpt,
 void bta_hh_le_save_ext_rpt_ref(tBTA_HH_DEV_CB *p_dev_cb,
                                 tBTA_GATTC_READ *p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_save_ext_rpt_ref");
     UINT8 *pp;
 
     /* if the length of the descriptor value is right, parse it
@@ -780,12 +796,18 @@ void bta_hh_le_register_input_notif(tBTA_HH_DEV_CB *p_dev_cb, UINT8 srvc_inst,
     for (i = 0; i < BTA_HH_LE_RPT_MAX; i ++, p_rpt ++)
     {
         if (p_rpt->rpt_type == BTA_HH_RPTT_INPUT)
-        {
+        {   
+            APPL_TRACE_DEBUG0("rpt_type == BTA_HH_RPTT_INPUT");
             if (p_rpt->uuid == GATT_UUID_BATTERY_LEVEL)
+            {
+                APPL_TRACE_DEBUG0("uuid == BATTERY_LEVEL");
                 srvc_uuid = UUID_SERVCLASS_BATTERY;
+            }
             else
+            {
+                APPL_TRACE_DEBUG0("uuid == LE_HID");
                 srvc_uuid = UUID_SERVCLASS_LE_HID;
-
+            }
             bta_hh_le_fill_16bits_srvc_id(TRUE, BTA_HH_LE_RPT_GET_SRVC_INST_ID(p_rpt->inst_id), srvc_uuid, &char_id.srvc_id);
             bta_hh_le_fill_16bits_char_id(BTA_HH_LE_RPT_GET_RPT_INST_ID(p_rpt->inst_id), p_rpt->uuid, &char_id.char_id);
 
@@ -798,6 +820,7 @@ void bta_hh_le_register_input_notif(tBTA_HH_DEV_CB *p_dev_cb, UINT8 srvc_inst,
             /* boot mode, deregister report input notification */
             else if (proto_mode == BTA_HH_PROTO_BOOT_MODE)
             {
+                APPL_TRACE_DEBUG0("proto mode = BTA_HH_PROTO_BOOT_MODE");
                 if (p_rpt->uuid == GATT_UUID_HID_REPORT &&
                     p_rpt->client_cfg_value == BTA_GATT_CLT_CONFIG_NOTIFICATION)
                 {
@@ -818,12 +841,13 @@ void bta_hh_le_register_input_notif(tBTA_HH_DEV_CB *p_dev_cb, UINT8 srvc_inst,
             }
             else if (proto_mode == BTA_HH_PROTO_RPT_MODE)
             {
+                APPL_TRACE_DEBUG1("proto_mode == BTA_HH_PROTO_RPT_MODE, p_rpt->uuid = 0x%04x", p_rpt->uuid);
                 if ((p_rpt->uuid == GATT_UUID_HID_BT_KB_INPUT ||
                     p_rpt->uuid == GATT_UUID_HID_BT_MOUSE_INPUT) &&
                     p_rpt->client_cfg_value == BTA_GATT_CLT_CONFIG_NOTIFICATION)
                 {
 
-                    APPL_TRACE_DEBUG1("---> Deregister Boot Report ID: %d", p_rpt->rpt_id);
+                    APPL_TRACE_DEBUG1("---> Deregister Report ID: %d", p_rpt->rpt_id);
                     BTA_GATTC_DeregisterForNotifications(bta_hh_cb.gatt_if,
                                                        p_dev_cb->addr,
                                                        &char_id);
@@ -840,6 +864,10 @@ void bta_hh_le_register_input_notif(tBTA_HH_DEV_CB *p_dev_cb, UINT8 srvc_inst,
             /*
             else unknow protocol mode */
         }
+        else
+        {
+            APPL_TRACE_DEBUG0("rpt_type != BTA_HH_RPTT_INPUT");
+        }
     }
 }
 
@@ -852,6 +880,7 @@ void bta_hh_le_register_input_notif(tBTA_HH_DEV_CB *p_dev_cb, UINT8 srvc_inst,
 *******************************************************************************/
 void bta_hh_le_open_cmpl(tBTA_HH_DEV_CB *p_cb)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_open_cmpl");
     if ( p_cb->disc_active == BTA_HH_LE_DISC_NONE)
     {
 #if BTA_HH_DEBUG
@@ -880,6 +909,7 @@ BOOLEAN bta_hh_le_write_char_clt_cfg(tBTA_HH_DEV_CB *p_cb,
                                      UINT8 char_inst_id, UINT16 char_uuid16,
                                      UINT16 clt_cfg_value)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_write_char_clt_cfg");
     tBTA_GATTC_CHAR_ID          char_id;
     tBT_UUID                    descr_cond;
     tBTA_GATTC_CHAR_DESCR_ID    descr_id;
@@ -922,6 +952,7 @@ BOOLEAN bta_hh_le_write_char_clt_cfg(tBTA_HH_DEV_CB *p_cb,
 *******************************************************************************/
 BOOLEAN bta_hh_le_write_rpt_clt_cfg(tBTA_HH_DEV_CB *p_cb, UINT8 srvc_inst_id)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_write_rpt_clt_cfg");
     UINT8           i;
     tBTA_HH_LE_RPT  *p_rpt = &p_cb->hid_srvc[srvc_inst_id].report[p_cb->clt_cfg_idx];
     UINT16          srvc_uuid;
@@ -1031,6 +1062,7 @@ BOOLEAN bta_hh_le_set_protocol_mode(tBTA_HH_DEV_CB *p_cb, tBTA_HH_PROTO_MODE mod
 *******************************************************************************/
 void bta_hh_le_get_protocol_mode(tBTA_HH_DEV_CB *p_cb)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_get_protocol_mode");
     tBTA_GATTC_CHAR_ID  char_id;
     tBTA_HH_HSDATA    hs_data;
     UINT8 i;
@@ -1074,6 +1106,7 @@ void bta_hh_le_expl_rpt(tBTA_HH_DEV_CB *p_dev_cb,
                            tBT_UUID *p_char_cond,
                            tBTA_GATT_CHAR_PROP prop)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_expl_rpt");
     tBTA_GATTC_CHAR_ID  char_result;
 
     do
@@ -1118,6 +1151,7 @@ void bta_hh_le_expl_rpt(tBTA_HH_DEV_CB *p_dev_cb,
 void bta_hh_le_expl_boot_rpt(tBTA_HH_DEV_CB *p_dev_cb, UINT16 char_uuid,
                                 tBTA_GATT_CHAR_PROP prop)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_expl_boot_rpt");
     if (bta_hh_le_find_alloc_report_entry(p_dev_cb,
                                       p_dev_cb->cur_srvc_index,
                                       char_uuid,
@@ -1141,6 +1175,7 @@ void bta_hh_le_expl_boot_rpt(tBTA_HH_DEV_CB *p_dev_cb, UINT16 char_uuid,
 *******************************************************************************/
 void bta_hh_le_dis_cback(BD_ADDR addr, tDIS_VALUE *p_dis_value)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_dis_cback");
     tBTA_HH_DEV_CB *p_cb = bta_hh_le_find_dev_cb_by_bda(addr);
 
 
@@ -1178,6 +1213,7 @@ void bta_hh_le_dis_cback(BD_ADDR addr, tDIS_VALUE *p_dis_value)
 *******************************************************************************/
 void bta_hh_le_pri_service_discovery(tBTA_HH_DEV_CB *p_cb)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_pri_service_discovery");
     tBT_UUID        pri_srvc;
 
     p_cb->disc_active |= (BTA_HH_LE_DISC_HIDS|BTA_HH_LE_DISC_DIS);
@@ -1235,8 +1271,10 @@ void bta_hh_le_encrypt_cback(BD_ADDR bd_addr, void *p_ref_data, tBTM_STATUS resu
 *******************************************************************************/
 void bta_hh_security_cmpl(tBTA_HH_DEV_CB *p_cb, tBTA_HH_DATA *p_buf)
 {
+    APPL_TRACE_DEBUG0("bta_hh_security_cmpl");
     if (p_cb->status == BTA_HH_OK)
     {
+        APPL_TRACE_DEBUG0("BTA_HH_OK");
         /*  discovery has been done for HID service */
         if (p_cb->app_id != 0 && bta_hh_le_hid_srvc_cached(p_cb))
         {
@@ -1268,6 +1306,7 @@ void bta_hh_security_cmpl(tBTA_HH_DEV_CB *p_cb, tBTA_HH_DATA *p_buf)
 *******************************************************************************/
 void bta_hh_start_security(tBTA_HH_DEV_CB *p_cb, tBTA_HH_DATA *p_buf)
 {
+    APPL_TRACE_DEBUG0("bta_hh_start_security");
     UINT8           sec_flag=0;
 
     /* verify bond */
@@ -1359,6 +1398,7 @@ void bta_hh_gatt_open(tBTA_HH_DEV_CB *p_cb, tBTA_HH_DATA *p_buf)
 *******************************************************************************/
 void bta_hh_le_close(tBTA_GATTC_CLOSE * p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_close");
     tBTA_HH_DEV_CB *p_dev_cb = bta_hh_le_find_dev_cb_by_bda(p_data->remote_bda);
     tBTA_HH_LE_CLOSE    *p_buf = NULL;
     UINT16  sm_event = BTA_HH_GATT_CLOSE_EVT;
@@ -1388,6 +1428,7 @@ void bta_hh_le_close(tBTA_GATTC_CLOSE * p_data)
 *******************************************************************************/
 void bta_hh_le_search_result(tBTA_GATTC_SRVC_RES *p_srvc_result)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_search_result");
     tBTA_HH_DEV_CB *p_dev_cb = bta_hh_le_find_dev_cb_by_conn_id(p_srvc_result->conn_id);
 
     if (p_dev_cb != NULL)
@@ -1493,6 +1534,7 @@ void bta_hh_le_srvc_expl_srvc(tBTA_HH_DEV_CB *p_dev_cb)
 *******************************************************************************/
 void bta_hh_le_srvc_search_cmpl(tBTA_GATTC_SEARCH_CMPL *p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_srvc_search_cmpl");
     tBTA_HH_DEV_CB *p_dev_cb = bta_hh_le_find_dev_cb_by_conn_id(p_data->conn_id);
 
     /* service search exception or no HID service is supported on remote */
@@ -1532,6 +1574,7 @@ void bta_hh_le_srvc_search_cmpl(tBTA_GATTC_SEARCH_CMPL *p_data)
 *******************************************************************************/
 static void bta_hh_le_search_hid_included(tBTA_HH_DEV_CB *p_dev_cb)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_search_hid_included");
     tBT_UUID    srvc_cond, char_cond;
     tBTA_GATTC_INCL_SVC_ID  inc_srvc_result;
     tBTA_GATT_SRVC_ID srvc_id;
@@ -1601,6 +1644,7 @@ static void bta_hh_le_search_hid_included(tBTA_HH_DEV_CB *p_dev_cb)
 *******************************************************************************/
 void bta_hh_read_battery_level_cmpl(UINT8 status, tBTA_HH_DEV_CB *p_dev_cb, tBTA_GATTC_READ *p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_read_battery_level_cmpl");
     p_dev_cb->hid_srvc[p_dev_cb->cur_srvc_index].expl_incl_srvc = TRUE;
     bta_hh_le_srvc_expl_srvc(p_dev_cb);
 }
@@ -1616,6 +1660,7 @@ void bta_hh_read_battery_level_cmpl(UINT8 status, tBTA_HH_DEV_CB *p_dev_cb, tBTA
 *******************************************************************************/
 static void bta_hh_le_search_hid_chars(tBTA_HH_DEV_CB *p_dev_cb)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_search_hid_chars");
     tBT_UUID    char_cond;
     tBTA_GATTC_CHAR_ID  char_result;
     tBTA_GATT_CHAR_PROP prop;
@@ -1708,6 +1753,7 @@ static void bta_hh_le_search_hid_chars(tBTA_HH_DEV_CB *p_dev_cb)
 *******************************************************************************/
 void bta_hh_le_save_rpt_map(tBTA_HH_DEV_CB *p_dev_cb, tBTA_GATTC_READ *p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_save_rpt_map");
     UINT8           *pp ;
     tBTA_HH_LE_HID_SRVC *p_srvc = &p_dev_cb->hid_srvc[p_data->srvc_id.id.inst_id];
 
@@ -1751,6 +1797,7 @@ void bta_hh_le_save_rpt_map(tBTA_HH_DEV_CB *p_dev_cb, tBTA_GATTC_READ *p_data)
 *******************************************************************************/
 void bta_hh_le_proc_get_rpt_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_GATTC_READ *p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_proc_get_rpt_cmpl");
     BT_HDR              *p_buf = NULL;
     tBTA_HH_LE_RPT      *p_rpt;
     tBTA_HH_HSDATA      hs_data;
@@ -1806,6 +1853,7 @@ void bta_hh_le_proc_get_rpt_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_GATTC_READ *p_da
 *******************************************************************************/
 void bta_hh_le_proc_read_proto_mode(tBTA_HH_DEV_CB *p_dev_cb, tBTA_GATTC_READ *p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_proc_read_proto_mode");
     tBTA_HH_HSDATA      hs_data;
 
     hs_data.status  = BTA_HH_ERR;
@@ -1845,6 +1893,7 @@ void bta_hh_le_proc_read_proto_mode(tBTA_HH_DEV_CB *p_dev_cb, tBTA_GATTC_READ *p
 *******************************************************************************/
 void bta_hh_w4_le_read_char_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_DATA *p_buf)
 {
+    APPL_TRACE_DEBUG0("bta_hh_w4_le_read_char_cmpl");
     tBTA_GATTC_READ     * p_data = (tBTA_GATTC_READ *)p_buf;
     UINT8               *pp ;
 
@@ -1906,6 +1955,7 @@ void bta_hh_w4_le_read_char_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_DATA *p_buf)
 *******************************************************************************/
 void bta_hh_le_read_char_cmpl (tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_DATA *p_buf)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_read_char_cmpl");
     tBTA_GATTC_READ * p_data = (tBTA_GATTC_READ *)p_buf;
 
     switch (p_data->char_id.uuid.uu.uuid16)
@@ -1940,6 +1990,7 @@ void bta_hh_le_read_char_cmpl (tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_DATA *p_buf)
 *******************************************************************************/
 void bta_hh_le_read_descr_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_DATA *p_buf)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_read_descr_cmpl");
     tBTA_HH_LE_RPT  *p_rpt;
     tBTA_GATTC_READ * p_data = (tBTA_GATTC_READ *)p_buf;
     UINT8   *pp;
@@ -1962,6 +2013,7 @@ void bta_hh_le_read_descr_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_DATA *p_buf)
 
 void bta_hh_le_read_battery_level_descr_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_GATTC_READ * p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_read_battery_level_descr_cmpl");
     tBTA_HH_LE_RPT  *p_rpt;
     UINT16 descr_uuid = p_data->descr_type.uuid.uu.uuid16;
 
@@ -2044,6 +2096,7 @@ void bta_hh_w4_le_read_descr_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_DATA *p_buf)
 *******************************************************************************/
 void bta_hh_w4_le_write_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_DATA *p_buf)
 {
+    APPL_TRACE_DEBUG0("bta_hh_w4_le_write_cmpl");
     tBTA_GATTC_WRITE    *p_data = (tBTA_GATTC_WRITE *)p_buf;
 
     if (p_data == NULL)
@@ -2132,6 +2185,7 @@ void bta_hh_le_write_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_DATA *p_buf)
 *******************************************************************************/
 void bta_hh_le_write_char_descr_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_DATA *p_buf)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_write_char_descr_cmpl");
     tBTA_GATTC_WRITE    *p_data = (tBTA_GATTC_WRITE *)p_buf;
     UINT8   srvc_inst_id, hid_inst_id;
 
@@ -2186,6 +2240,7 @@ void bta_hh_le_write_char_descr_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_DATA *p_b
 *******************************************************************************/
 void bta_hh_le_input_rpt_notify(tBTA_GATTC_NOTIFY *p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_input_rpt_notify");
     tBTA_HH_DEV_CB       *p_dev_cb = bta_hh_le_find_dev_cb_by_conn_id(p_data->conn_id);
     UINT8           app_id;
     UINT8           *p_buf;
@@ -2257,6 +2312,7 @@ void bta_hh_le_input_rpt_notify(tBTA_GATTC_NOTIFY *p_data)
 *******************************************************************************/
 void bta_hh_le_open_fail(tBTA_HH_DEV_CB *p_cb, tBTA_HH_DATA *p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_open_fail");
     tBTA_HH_CONN            conn_dat ;
     tBTA_HH_LE_HID_SRVC     *p_hid_srvc = &p_cb->hid_srvc[0];
     UINT8   i;
@@ -2294,6 +2350,7 @@ void bta_hh_le_open_fail(tBTA_HH_DEV_CB *p_cb, tBTA_HH_DATA *p_data)
 *******************************************************************************/
 void bta_hh_gatt_close(tBTA_HH_DEV_CB *p_cb, tBTA_HH_DATA *p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_gatt_close");
     tBTA_HH_CBDATA          disc_dat = {BTA_HH_OK, 0};
 
     /* finaliza device driver */
@@ -2335,8 +2392,12 @@ void bta_hh_gatt_close(tBTA_HH_DEV_CB *p_cb, tBTA_HH_DATA *p_data)
 *******************************************************************************/
 void bta_hh_le_api_disc_act(tBTA_HH_DEV_CB *p_cb)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_api_disc_act");
     if (p_cb->conn_id != BTA_GATT_INVALID_CONN_ID)
+    {
+        APPL_TRACE_DEBUG0("conn_id not BTA_GATT_INVALID_CONN_ID");
         BTA_GATTC_Close(p_cb->conn_id);
+    }
 }
 
 /*******************************************************************************
@@ -2350,6 +2411,7 @@ void bta_hh_le_api_disc_act(tBTA_HH_DEV_CB *p_cb)
 *******************************************************************************/
 void bta_hh_le_get_rpt(tBTA_HH_DEV_CB *p_cb, UINT8 srvc_inst, tBTA_HH_RPT_TYPE r_type, UINT8 rpt_id)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_get_rpt");
     tBTA_HH_LE_RPT  *p_rpt = bta_hh_le_find_rpt_by_idtype(p_cb->hid_srvc[srvc_inst].report, p_cb->mode, r_type, rpt_id);
     tBTA_GATTC_CHAR_ID  char_id;
     UINT16  srvc_uuid = UUID_SERVCLASS_LE_HID;
@@ -2386,6 +2448,7 @@ void bta_hh_le_write_rpt(tBTA_HH_DEV_CB *p_cb, UINT8 srvc_inst,
                          tBTA_HH_RPT_TYPE r_type,
                          BT_HDR *p_buf, UINT16 w4_evt )
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_write_rpt");
     tBTA_HH_LE_RPT  *p_rpt;
     tBTA_GATTC_CHAR_ID  char_id;
     UINT8   *p_value, rpt_id;
@@ -2435,6 +2498,7 @@ void bta_hh_le_write_rpt(tBTA_HH_DEV_CB *p_cb, UINT8 srvc_inst,
 *******************************************************************************/
 void bta_hh_le_suspend(tBTA_HH_DEV_CB *p_cb, tBTA_HH_TRANS_CTRL_TYPE ctrl_type)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_suspend");
     UINT8 i;
     tBTA_GATTC_CHAR_ID  char_id;
 
@@ -2465,6 +2529,7 @@ void bta_hh_le_suspend(tBTA_HH_DEV_CB *p_cb, tBTA_HH_TRANS_CTRL_TYPE ctrl_type)
 *******************************************************************************/
 void bta_hh_le_write_dev_act(tBTA_HH_DEV_CB *p_cb, tBTA_HH_DATA *p_data)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_write_dev_act");
     switch(p_data->api_sndcmd.t_type)
     {
         case HID_TRANS_SET_PROTOCOL:
@@ -2529,6 +2594,7 @@ void bta_hh_le_write_dev_act(tBTA_HH_DEV_CB *p_cb, tBTA_HH_DATA *p_data)
 *******************************************************************************/
 void bta_hh_le_get_dscp_act(tBTA_HH_DEV_CB *p_cb)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_get_dscp_act");
     UINT8 i;
 
     for (i = 0 ;i < BTA_HH_LE_HID_SRVC_MAX; i ++)
@@ -2556,6 +2622,7 @@ void bta_hh_le_get_dscp_act(tBTA_HH_DEV_CB *p_cb)
 *******************************************************************************/
 static void bta_hh_le_add_dev_bg_conn(tBTA_HH_DEV_CB *p_cb, BOOLEAN check_bond)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_add_dev_bg_conn");
     UINT8           sec_flag=0;
     BOOLEAN         to_add = TRUE;
 
@@ -2593,6 +2660,7 @@ static void bta_hh_le_add_dev_bg_conn(tBTA_HH_DEV_CB *p_cb, BOOLEAN check_bond)
 *******************************************************************************/
 UINT8 bta_hh_le_add_device(tBTA_HH_DEV_CB *p_cb, tBTA_HH_MAINT_DEV *p_dev_info)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_add_device");
 
     /* update DI information */
     bta_hh_update_di_info(p_cb,
@@ -2626,6 +2694,7 @@ UINT8 bta_hh_le_add_device(tBTA_HH_DEV_CB *p_cb, tBTA_HH_MAINT_DEV *p_dev_info)
 *******************************************************************************/
 void bta_hh_le_remove_dev_bg_conn(tBTA_HH_DEV_CB *p_dev_cb)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_remove_dev_bg_conn");
     if (p_dev_cb->in_bg_conn)
     {
         p_dev_cb->in_bg_conn = FALSE;
@@ -2645,6 +2714,7 @@ void bta_hh_le_remove_dev_bg_conn(tBTA_HH_DEV_CB *p_dev_cb)
 *******************************************************************************/
 void bta_hh_le_update_scpp(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_DATA *p_buf)
 {
+    APPL_TRACE_DEBUG0("bta_le_update_scpp");
     tBTA_GATTC_CHAR_ID  char_id;
     UINT8   value[4], *p = value;
     tBTA_HH_CBDATA      cback_data ;
@@ -2692,7 +2762,7 @@ static void bta_hh_gattc_callback(tBTA_GATTC_EVT event, tBTA_GATTC *p_data)
     tBTA_HH_DEV_CB *p_dev_cb;
     UINT16          evt;
 #if BTA_HH_DEBUG
-    APPL_TRACE_DEBUG1("bta_hh_gattc_callback event = %d", event);
+    APPL_TRACE_DEBUG1("======bta_hh_gattc_callback===== event = %d", event);
 #endif
     if (p_data == NULL)
         return;
@@ -2716,10 +2786,15 @@ static void bta_hh_gattc_callback(tBTA_GATTC_EVT event, tBTA_GATTC *p_data)
         case BTA_GATTC_READ_DESCR_EVT: /* 8 */
             p_dev_cb = bta_hh_le_find_dev_cb_by_conn_id(p_data->read.conn_id);
             if (event == BTA_GATTC_READ_CHAR_EVT)
+            {
+                APPL_TRACE_DEBUG0("BTA_GATTC_READ_CHAR_EVT");
                 evt = BTA_HH_GATT_READ_CHAR_CMPL_EVT;
+            }
             else
+            {
+                APPL_TRACE_DEBUG0("BTA_GATTC_READ_DESCR_EVT");
                 evt = BTA_HH_GATT_READ_DESCR_CMPL_EVT;
-
+            }
             bta_hh_sm_execute(p_dev_cb, evt, (tBTA_HH_DATA *)&p_data->read);
             break;
 
@@ -2767,6 +2842,7 @@ static void bta_hh_gattc_callback(tBTA_GATTC_EVT event, tBTA_GATTC *p_data)
 *******************************************************************************/
 void bta_hh_le_hid_read_rpt_clt_cfg(BD_ADDR bd_addr, UINT8 rpt_id)
 {
+    APPL_TRACE_DEBUG1("bta_hh_le_hid_read_rpt_clt_cfg, rpt_id = %d", rpt_id);
     tBTA_HH_DEV_CB *p_cb = NULL;
     tBTA_HH_LE_RPT *p_rpt ;
     UINT8           index = BTA_HH_IDX_INVALID;
@@ -2811,6 +2887,7 @@ void bta_hh_le_hid_read_rpt_clt_cfg(BD_ADDR bd_addr, UINT8 rpt_id)
 *******************************************************************************/
 static void bta_hh_le_search_scps(tBTA_HH_DEV_CB *p_cb)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_search_scps");
     tBT_UUID        pri_srvc;
 
     if ( p_cb->mode == BTA_HH_PROTO_RPT_MODE)
@@ -2836,6 +2913,7 @@ static void bta_hh_le_search_scps(tBTA_HH_DEV_CB *p_cb)
 *******************************************************************************/
 static void bta_hh_le_search_scps_chars(tBTA_HH_DEV_CB *p_cb)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_search_scps_chars");
     tBTA_GATT_SRVC_ID   srvc_id;
     tBT_UUID            char_cond;
     tBTA_GATTC_CHAR_ID  char_result;
@@ -2874,6 +2952,7 @@ static void bta_hh_le_search_scps_chars(tBTA_HH_DEV_CB *p_cb)
 *******************************************************************************/
 static void bta_hh_le_register_scpp_notif(tBTA_HH_DEV_CB *p_dev_cb, tBTA_GATT_STATUS status)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_register_scpp_notif");
     UINT8               sec_flag=0;
     tBTA_GATTC_CHAR_ID  char_id;
 
@@ -2916,6 +2995,7 @@ static void bta_hh_le_register_scpp_notif(tBTA_HH_DEV_CB *p_dev_cb, tBTA_GATT_ST
 *******************************************************************************/
 static void bta_hh_le_register_scpp_notif_cmpl(tBTA_HH_DEV_CB *p_dev_cb, tBTA_GATT_STATUS status)
 {
+    APPL_TRACE_DEBUG0("bta_hh_le_register_scpp_notif_cmpl");
     tBTA_HH_CBDATA      cback_data ;
     UINT16              cb_evt = p_dev_cb->w4_evt;
 

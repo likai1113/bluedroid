@@ -470,6 +470,7 @@ static void gatt_le_connect_cback (BD_ADDR bd_addr, BOOLEAN connected, UINT16 re
 *******************************************************************************/
 static void gatt_le_data_ind (BD_ADDR bd_addr, BT_HDR *p_buf)
 {
+    GATT_TRACE_DEBUG0("gatt_le_data_ind");
     tGATT_TCB    *p_tcb;
 
     /* Find CCB based on bd addr */
@@ -872,6 +873,7 @@ static void gatt_send_conn_cback(tGATT_TCB *p_tcb)
 *******************************************************************************/
 void gatt_data_process (tGATT_TCB *p_tcb, BT_HDR *p_buf)
 {
+    GATT_TRACE_DEBUG0("gatt_data_process");
     UINT8   *p = (UINT8 *)(p_buf + 1) + p_buf->offset;
     UINT8   op_code, pseudo_op_code;
     UINT16  msg_len;
@@ -881,6 +883,7 @@ void gatt_data_process (tGATT_TCB *p_tcb, BT_HDR *p_buf)
     {
         msg_len = p_buf->len - 1;
         STREAM_TO_UINT8(op_code, p);
+        GATT_TRACE_DEBUG1("op_code = %d", op_code);
 
         /* remove the two MSBs associated with sign write and write cmd */
         pseudo_op_code = op_code & (~GATT_WRITE_CMD_MASK);
@@ -889,6 +892,7 @@ void gatt_data_process (tGATT_TCB *p_tcb, BT_HDR *p_buf)
         {
             if (op_code == GATT_SIGN_CMD_WRITE)
             {
+                GATT_TRACE_DEBUG0("op_code == GATT_SIGN_CMD_WRITE");
                 gatt_verify_signature(p_tcb, p_buf);
                 return;
             }
@@ -896,9 +900,15 @@ void gatt_data_process (tGATT_TCB *p_tcb, BT_HDR *p_buf)
             {
                 /* message from client */
                 if ((op_code % 2) == 0)
+                {
+                    GATT_TRACE_DEBUG0("gatt_server_handle_client_req");
                     gatt_server_handle_client_req (p_tcb, op_code, msg_len, p);
+                }
                 else
+                {
+                    GATT_TRACE_DEBUG0("gatt_client_handle_server_rsp");
                     gatt_client_handle_server_rsp (p_tcb, op_code, msg_len, p);
+                }
             }
         }
         else

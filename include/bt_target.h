@@ -953,7 +953,7 @@ and USER_HW_DISABLE_API macros */
 
 /* When connectable mode is set to TRUE, the device will respond to paging. */
 #ifndef BTM_IS_CONNECTABLE
-#define BTM_IS_CONNECTABLE          FALSE
+#define BTM_IS_CONNECTABLE          TRUE
 #endif
 
 /* Sets the Page_Scan_Window:  the length of time that the device is performing a page scan. */
@@ -968,7 +968,7 @@ and USER_HW_DISABLE_API macros */
 
 /* This is set to automatically perform inquiry scan on startup. */
 #ifndef BTM_IS_DISCOVERABLE
-#define BTM_IS_DISCOVERABLE         FALSE
+#define BTM_IS_DISCOVERABLE         TRUE
 #endif
 
 /* When automatic inquiry scan is enabled, this sets the discovery mode. */
@@ -1068,7 +1068,7 @@ and USER_HW_DISABLE_API macros */
  * product model name is used as the default local name.
  */
 #ifndef BTM_DEF_LOCAL_NAME
-#define BTM_DEF_LOCAL_NAME      ""
+#define BTM_DEF_LOCAL_NAME      "bt-likai"
 #endif
 
 /* Maximum service name stored with security authorization (0 if not needed) */

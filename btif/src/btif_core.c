@@ -1234,7 +1234,7 @@ bt_status_t btif_set_adapter_property(const bt_property_t *property)
                 }
 
                 BTIF_TRACE_EVENT1("set property scan mode : %x", mode);
-
+                BTIF_TRACE_DEBUG2("BTA_DmSetVisibility, disc_mode = %d, conn_mode = %d", disc_mode, conn_mode);
                 BTA_DmSetVisibility(disc_mode, conn_mode, BTA_DM_IGNORE, BTA_DM_IGNORE);
 
                 storage_req_id = BTIF_CORE_STORAGE_ADAPTER_WRITE;

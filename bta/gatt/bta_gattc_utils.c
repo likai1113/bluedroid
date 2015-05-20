@@ -695,6 +695,7 @@ BOOLEAN bta_gattc_charid_compare(tBTA_GATTC_CHAR_ID *p_src, tBTA_GATTC_CHAR_ID *
 BOOLEAN bta_gattc_check_notif_registry(tBTA_GATTC_RCB  *p_clreg, tBTA_GATTC_SERV *p_srcb,
                                        tBTA_GATTC_NOTIFY  *p_notify)
 {
+    APPL_TRACE_DEBUG0("bta_gattc_check_notif_registry");
     UINT8           i;
 
     for (i = 0 ; i < BTA_GATTC_NOTIF_REG_MAX; i ++)
@@ -707,6 +708,7 @@ BOOLEAN bta_gattc_check_notif_registry(tBTA_GATTC_RCB  *p_clreg, tBTA_GATTC_SERV
             return TRUE;
         }
     }
+    APPL_TRACE_DEBUG0("Notification not registered!");
     return FALSE;
 
 }

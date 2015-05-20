@@ -442,7 +442,6 @@ static void *bt_hc_worker_thread(void *arg)
         events = ready_events;
         ready_events = 0;
         pthread_mutex_unlock(&hc_cb.mutex);
-
 #ifndef HCI_USE_MCT
         if (events & HC_EVENT_RX)
         {

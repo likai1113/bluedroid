@@ -68,6 +68,7 @@ void btm_update_scanner_filter_policy(tBTM_BLE_SFP scan_policy)
 *******************************************************************************/
 BOOLEAN btm_add_dev_to_controller (BOOLEAN to_add, BD_ADDR bd_addr, UINT8 attr)
 {
+    BTM_TRACE_DEBUG0("btm_add_dev_to_controller");
     tBTM_SEC_DEV_REC    *p_dev_rec = btm_find_dev (bd_addr);
     tBLE_ADDR_TYPE  addr_type = BLE_ADDR_PUBLIC;
     BOOLEAN             started = FALSE;
@@ -80,18 +81,24 @@ BOOLEAN btm_add_dev_to_controller (BOOLEAN to_add, BD_ADDR bd_addr, UINT8 attr)
 
         if (to_add)
         {
+            BTM_TRACE_DEBUG0("likai->>to add");
             if (p_dev_rec->ble.ble_addr_type == BLE_ADDR_PUBLIC || !BTM_BLE_IS_RESOLVE_BDA(bd_addr))
             {
+                BTM_TRACE_DEBUG0("ble_addr_type == BLE_ADDR_PUBLIC, or addr is not resolve bda");
+                BTM_TRACE_DEBUG0("btsnd_hcic_ble_add_white_list");
                 started = btsnd_hcic_ble_add_white_list (p_dev_rec->ble.ble_addr_type, bd_addr);
             }
             if (memcmp(p_dev_rec->ble.static_addr, bd_addr, BD_ADDR_LEN) != 0 &&
                 memcmp(p_dev_rec->ble.static_addr, dummy_bda, BD_ADDR_LEN) != 0)
             {
+                 BTM_TRACE_DEBUG0("static addr not bd_addr, and not dummy_bda");
+                 BTM_TRACE_DEBUG0("btsnd_hcic_ble_add_white_list");
                  started = btsnd_hcic_ble_add_white_list (p_dev_rec->ble.static_addr_type, p_dev_rec->ble.static_addr);
             }
         }
         else
         {
+            BTM_TRACE_DEBUG0("to remove");
             if (!BTM_BLE_IS_RESOLVE_BDA(bd_addr))
             {
                     started = btsnd_hcic_ble_remove_from_white_list (p_dev_rec->ble.ble_addr_type, bd_addr);
@@ -148,6 +155,7 @@ BOOLEAN btm_execute_wl_dev_operation(void)
 *******************************************************************************/
 void btm_enq_wl_dev_operation(BOOLEAN to_add, BD_ADDR bd_addr, UINT8 attr)
 {
+    BTM_TRACE_DEBUG1("btm_enq_wl_dev_operation , to_add = %d", to_add);
     tBTM_BLE_WL_OP *p_dev_op = btm_cb.ble_ctr_cb.wl_op_q;
     UINT8   i = 0;
 
@@ -578,6 +586,7 @@ static void btm_suspend_wl_activity(tBTM_BLE_WL_STATE wl_state)
 *******************************************************************************/
 static void btm_resume_wl_activity(tBTM_BLE_WL_STATE wl_state)
 {
+    BTM_TRACE_DEBUG0("btm_resume_wl_activity");
     btm_ble_resume_bg_conn();
 
     if (wl_state & BTM_BLE_WL_ADV)

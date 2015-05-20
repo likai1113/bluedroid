@@ -267,6 +267,7 @@ int uinput_driver_check()
 
 int uinput_create(char *name)
 {
+    BTIF_TRACE_DEBUG1("uinput_create, name = %s", name);
     struct uinput_dev dev;
     int fd, err, x = 0;
 

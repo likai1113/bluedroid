@@ -861,6 +861,7 @@ static const btav_interface_t bt_av_interface = {
     init,
     connect,
     disconnect,
+    NULL,//configure_cp
     cleanup,
 };
 

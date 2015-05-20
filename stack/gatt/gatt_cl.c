@@ -1136,6 +1136,7 @@ BOOLEAN gatt_cl_send_next_cmd_inq(tGATT_TCB *p_tcb)
 void gatt_client_handle_server_rsp (tGATT_TCB *p_tcb, UINT8 op_code,
                                     UINT16 len, UINT8 *p_data)
 {
+    GATT_TRACE_DEBUG1("gatt_client_handle_server_rsp, op_code = %d", op_code);
     tGATT_CLCB   *p_clcb = NULL;
     UINT8        rsp_code;
 

@@ -1447,6 +1447,7 @@ void gatts_process_value_conf(tGATT_TCB *p_tcb, UINT8 op_code)
 void gatt_server_handle_client_req (tGATT_TCB *p_tcb, UINT8 op_code,
                                     UINT16 len, UINT8 *p_data)
 {
+    GATT_TRACE_DEBUG1("gatt_server_handle_client_req, op_code = %d", op_code);
     /* there is pending command, discard this one */
     if (!gatt_sr_cmd_empty(p_tcb) && op_code != GATT_HANDLE_VALUE_CONF)
         return;

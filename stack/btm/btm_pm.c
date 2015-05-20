@@ -88,12 +88,12 @@ const UINT8 btm_pm_md_comp_matrix[BTM_PM_NUM_SET_MODES*BTM_PM_NUM_SET_MODES] =
 static int btm_pm_find_acl_ind(BD_ADDR remote_bda);
 static tBTM_STATUS btm_pm_snd_md_req( UINT8 pm_id, int link_ind, tBTM_PM_PWR_MD *p_mode );
 
-/*
+
 #ifdef BTM_PM_DEBUG
 #undef BTM_PM_DEBUG
-#define BTM_PM_DEBUG    TRUE
 #endif
-*/
+
+#define BTM_PM_DEBUG    TRUE
 
 #if BTM_PM_DEBUG == TRUE
 const char * btm_pm_state_str[] =

@@ -43,7 +43,7 @@
 #endif
 
 #if (HCI_DBG == TRUE)
-#define HCIDBG(param, ...) {LOGD(param, ## __VA_ARGS__);}
+#define HCIDBG(param, ...) {ALOGD(param, ## __VA_ARGS__);}
 #else
 #define HCIDBG(param, ...) {}
 #endif

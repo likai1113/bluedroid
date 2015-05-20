@@ -1507,6 +1507,7 @@ tL2C_CCB *l2cu_allocate_ccb (tL2C_LCB *p_lcb, UINT16 cid)
 *******************************************************************************/
 BOOLEAN l2cu_start_post_bond_timer (UINT16 handle)
 {
+    L2CAP_TRACE_DEBUG0("l2cu_start_post_bond_timer");
     UINT16    timeout;
     tL2C_LCB *p_lcb = l2cu_find_lcb_by_handle(handle);
 
@@ -2638,6 +2639,7 @@ BOOLEAN l2cu_initialize_fixed_ccb (tL2C_LCB *p_lcb, UINT16 fixed_cid, tL2CAP_FCR
 *******************************************************************************/
 void l2cu_no_dynamic_ccbs (tL2C_LCB *p_lcb)
 {
+    L2CAP_TRACE_DEBUG0("l2cu_no_dynamic_ccbs");
     tBTM_STATUS     rc;
     UINT16          timeout = p_lcb->idle_timeout;
 

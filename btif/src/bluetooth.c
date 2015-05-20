@@ -412,6 +412,9 @@ static const bt_interface_t bluetoothInterface = {
 #else
     NULL,
 #endif
+    NULL,//enter_headless_mode
+    NULL,//add_headless_mode_wakeup_device
+    NULL,//delete_headless_mode_wakeup_device
     config_hci_snoop_log
 };
 

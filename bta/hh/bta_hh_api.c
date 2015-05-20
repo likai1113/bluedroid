@@ -114,6 +114,7 @@ void BTA_HhDisable(void)
 *******************************************************************************/
 void BTA_HhClose(UINT8 dev_handle)
 {
+    APPL_TRACE_ERROR1("BTA_HhClose, dev_handle = %d", dev_handle);
     BT_HDR    *p_buf;
 
     if ((p_buf = (BT_HDR *)GKI_getbuf((UINT16)sizeof(BT_HDR))) != NULL)
@@ -138,6 +139,7 @@ void BTA_HhClose(UINT8 dev_handle)
 *******************************************************************************/
 void BTA_HhOpen(BD_ADDR dev_bda, tBTA_HH_PROTO_MODE mode, tBTA_SEC sec_mask)
 {
+    APPL_TRACE_ERROR0("BTA_HhOpen");
     tBTA_HH_API_CONN *p_buf;
 
     p_buf = (tBTA_HH_API_CONN *)GKI_getbuf((UINT16)sizeof(tBTA_HH_API_CONN));

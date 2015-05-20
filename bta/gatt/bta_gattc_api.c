@@ -149,6 +149,7 @@ void BTA_GATTC_AppDeregister(tBTA_GATTC_IF client_if)
 *******************************************************************************/
 void BTA_GATTC_Open(tBTA_GATTC_IF client_if, BD_ADDR remote_bda, BOOLEAN is_direct)
 {
+    APPL_TRACE_DEBUG1("BTA_GATTC_Open, is_direct = %d", is_direct);
     tBTA_GATTC_API_OPEN  *p_buf;
 
     if ((p_buf = (tBTA_GATTC_API_OPEN *) GKI_getbuf(sizeof(tBTA_GATTC_API_OPEN))) != NULL)
@@ -181,6 +182,7 @@ void BTA_GATTC_Open(tBTA_GATTC_IF client_if, BD_ADDR remote_bda, BOOLEAN is_dire
 *******************************************************************************/
 void BTA_GATTC_CancelOpen(tBTA_GATTC_IF client_if, BD_ADDR remote_bda, BOOLEAN is_direct)
 {
+    APPL_TRACE_DEBUG1("BTA_GATTC_CancelOpen, is_direct = %d", is_direct);
     tBTA_GATTC_API_CANCEL_OPEN  *p_buf;
 
     if ((p_buf = (tBTA_GATTC_API_CANCEL_OPEN *) GKI_getbuf(sizeof(tBTA_GATTC_API_CANCEL_OPEN))) != NULL)
@@ -209,6 +211,7 @@ void BTA_GATTC_CancelOpen(tBTA_GATTC_IF client_if, BD_ADDR remote_bda, BOOLEAN i
 *******************************************************************************/
 void BTA_GATTC_Close(UINT16 conn_id)
 {
+    APPL_TRACE_DEBUG1("BTA_GATTC_Close, conn_id = %d", conn_id);
     BT_HDR  *p_buf;
 
     if ((p_buf = (BT_HDR *) GKI_getbuf(sizeof(BT_HDR))) != NULL)

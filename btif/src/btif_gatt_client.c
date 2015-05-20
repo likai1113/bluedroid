@@ -618,7 +618,10 @@ static void btgattc_handle_event(uint16_t event, char* p_param)
         case BTIF_GATTC_CLOSE:
             // Disconnect established connections
             if (p_cb->conn_id != 0)
+            {
+                ALOGD("likai->>>BTIF_GATTC_CLOSE");
                 BTA_GATTC_Close(p_cb->conn_id);
+            }
             else
                 BTA_GATTC_CancelOpen(p_cb->client_if, p_cb->bd_addr.address, TRUE);
 
@@ -904,7 +907,8 @@ static bt_status_t btif_gattc_listen(int client_if, bool start)
 
 static bt_status_t btif_gattc_set_adv_data(int client_if, bool set_scan_rsp, bool include_name,
                 bool include_txpower, int min_interval, int max_interval, int appearance,
-                uint16_t manufacturer_len, char* manufacturer_data)
+                uint16_t manufacturer_len, char* manufacturer_data, uint16_t service_data_len, char* service_data,
+                    uint16_t service_uuid_len, char* service_uuid)
 {
     CHECK_BTGATT_INIT();
     btif_gattc_cb_t btif_cb;
