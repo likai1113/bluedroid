@@ -37,7 +37,7 @@
 
 #define BTA_HH_LE_RPT_TYPE_VALID(x)     ((x) <= BTA_LE_HID_RPT_FEATURE && (x)>=BTA_LE_HID_RPT_INPUT)
 
-#define BTA_HH_LE_RPT_INST_ID_MAP(s,c)  (UINT8)(((s)<<4)||(c))
+#define BTA_HH_LE_RPT_INST_ID_MAP(s,c)  (UINT8)(((s)<<4)|(c))
 #define BTA_HH_LE_RPT_GET_SRVC_INST_ID(x)  (UINT8)(x  >> 4)
 #define BTA_HH_LE_RPT_GET_RPT_INST_ID(x)  (UINT8)(x & 0x0f)
 
@@ -1697,6 +1697,7 @@ static void bta_hh_le_search_hid_chars(tBTA_HH_DEV_CB *p_dev_cb)
                             &char_result,
                             &prop) == BTA_GATT_OK)
     {
+        APPL_TRACE_DEBUG0("GetFirstChar GATT_OK");
         switch (char_uuid)
         {
         case GATT_UUID_HID_CONTROL_POINT:
@@ -1706,6 +1707,7 @@ static void bta_hh_le_search_hid_chars(tBTA_HH_DEV_CB *p_dev_cb)
         case GATT_UUID_HID_INFORMATION:
         case GATT_UUID_HID_REPORT_MAP:
             /* read the char value */
+            APPL_TRACE_DEBUG0("GATT_UUID_HID_INFORMATION or GATT_UUID_HID_REPORT_MAP");
             BTA_GATTC_ReadCharacteristic(p_dev_cb->conn_id,
                                         &char_result,
                                         BTA_GATT_AUTH_REQ_NONE);
@@ -1732,13 +1734,17 @@ static void bta_hh_le_search_hid_chars(tBTA_HH_DEV_CB *p_dev_cb)
     }
     else
     {
+        APPL_TRACE_DEBUG0("GetFirstChar not OK");
         if (char_uuid == GATT_UUID_HID_PROTO_MODE)
+        {
+            APPL_TRACE_DEBUG0("char_uuid == GATT_UUID_HID_PROTO_MODE");
             next = !bta_hh_le_set_protocol_mode(p_dev_cb, p_dev_cb->mode);
-
+        }
     }
 
     if (next == TRUE)
     {
+        APPL_TRACE_DEBUG0("next is TRUE");
         bta_hh_le_search_hid_chars(p_dev_cb);
     }
 }
