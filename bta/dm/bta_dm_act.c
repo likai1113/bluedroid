@@ -5187,7 +5187,6 @@ static void bta_dm_gatt_disc_complete(UINT16 conn_id, tBTA_GATT_STATUS status)
             }
             else
             {
-                APPL_TRACE_DEBUG0("likai->>>BTA_GATTC_Close");
                 BTA_GATTC_Close(conn_id);
                 bta_dm_search_cb.conn_id = BTA_GATT_INVALID_CONN_ID;
             }
@@ -5210,7 +5209,6 @@ void bta_dm_close_gatt_conn(tBTA_DM_MSG *p_data)
 {
     if (bta_dm_search_cb.conn_id != BTA_GATT_INVALID_CONN_ID)
     {
-        APPL_TRACE_DEBUG0("likai->>>bta_dm_close_gatt_conn");
         BTA_GATTC_Close(bta_dm_search_cb.conn_id);
     }
     bta_dm_search_cb.conn_id = BTA_GATT_INVALID_CONN_ID;
